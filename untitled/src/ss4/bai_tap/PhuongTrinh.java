@@ -1,10 +1,9 @@
 package ss4.bai_tap;
 
-public class PhuongTrinh {
-    public class PhuongTrinhBac2 {
+    public class PhuongTrinh {
         double a, b, c;
 
-        public PhuongTrinhBac2(double a, double b, double c) {
+        public PhuongTrinh(double a, double b, double c) {
             this.a = a;
             this.b = b;
             this.c = c;
@@ -41,4 +40,4 @@ public class PhuongTrinh {
             }
         }
     }
-}
+
