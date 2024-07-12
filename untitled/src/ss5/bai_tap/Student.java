@@ -1,0 +1,17 @@
+package ss5.bai_tap;
+
+public class Student {
+    private String name;
+    private String classe;
+    public  Student(){};
+    void setName(String name){
+        this.name = name;
+    }
+    protected  void setClasse(String classe){
+        this.classe = classe;
+    }
+    @Override
+    public String toString(){
+        return "Student [name=" + name + ", classe=" + classe + "]";
+    }
+}
