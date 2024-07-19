@@ -1,8 +1,6 @@
 package ss6.thuc_hanh;
 
-import java.awt.*;
-
-public class Square extends Rectangle {
+public class Square extends Rectangle1 {
     public Square() {}
     public Square(double side){
         super(side, side);
