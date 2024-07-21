@@ -1,7 +1,5 @@
 package ss7.bai_tap.bai_tap1;
 
-import ss7.bai_tap.bai_tap2.Rectangle;
-
 public class Main {
     public static void main(String[] args) {
         Resizeable[] shapes = new Resizeable[5];

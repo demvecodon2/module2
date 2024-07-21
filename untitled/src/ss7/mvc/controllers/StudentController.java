@@ -1,35 +1,43 @@
 package ss7.mvc.controllers;
 
 import ss7.mvc.model.Student;
-import ss7.mvc.sevirce.student_sevirce.IStudentSevrice;
-import ss7.mvc.sevirce.student_sevirce.StudentSevirce;
+import ss7.mvc.sevirce.student_sevirce.IStudentService;
+import ss7.mvc.sevirce.student_sevirce.StudentService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
 public class StudentController {
-    private static IStudentSevrice iStudentSevrice = new StudentSevirce();
+    private static IStudentService iStudentService = new StudentService();
     private static Scanner scanner = new Scanner(System.in);
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static void displayStudent() {
         int choice;
         do {
             System.out.println("QUẢN LÝ HỌC VIÊN\n" +
-                    "1. hiển thị học viên\n" +
-                    "2. thêm mới học viên\n" +
-                    "3. chỉnh sửa thông tin\n" +
-                    "4. xoá học viên\n" +
-                    "5. trở về trang chủ\n" +
-                    "nhập lựa chọn của bạn:");
-            choice = Integer.parseInt(scanner.nextLine());
+                    "1. Hiển thị học viên\n" +
+                    "2. Thêm mới học viên\n" +
+                    "3. Chỉnh sửa thông tin\n" +
+                    "4. Xoá học viên\n" +
+                    "5. Trở về trang chủ\n" +
+                    "Nhập lựa chọn của bạn:");
+            choice = parseInt();
             switch (choice) {
                 case 1:
                     displayStudents();
                     break;
                 case 2:
                     addStudent();
+                    break;
+                case 3:
+                    updateStudent();
+                    break;
+                case 4:
+                    deleteStudent();
                     break;
                 case 5:
                     return;
@@ -40,17 +48,20 @@ public class StudentController {
     }
 
     public static void displayStudents() {
-        List<Student> students = iStudentSevrice.findAll();
-        for (Student student : students) {
-            System.out.println(student);
+        List<Student> students = iStudentService.findAll();
+        if (students.isEmpty()) {
+            System.out.println("Danh sách học viên trống.");
+        } else {
+            for (Student student : students) {
+                System.out.println(student);
+            }
         }
     }
 
     public static void addStudent() {
         System.out.println("Nhập tên học sinh:");
         String name = scanner.nextLine();
-        System.out.println("Nhập ngày tháng năm sinh học viên (định dạng: yyyy-MM-dd):");
-        LocalDate dateOfBirth = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate dateOfBirth = promptForDate("Nhập ngày tháng năm sinh học viên (định dạng: yyyy-MM-dd):");
         System.out.println("Nhập email học viên:");
         String email = scanner.nextLine();
         System.out.println("Nhập số điện thoại học viên:");
@@ -58,9 +69,74 @@ public class StudentController {
         System.out.println("Nhập lớp của học viên:");
         String className = scanner.nextLine();
 
-        Student student = new Student(name, dateOfBirth, email, phoneNumber, className);
-        iStudentSevrice.add(student);
+        int id = iStudentService.getNextId();
 
-        System.out.println("Thêm học viên thành công.");
+        Student student = new Student(id, name, dateOfBirth, email, phoneNumber, className);
+        iStudentService.add(student);
+
+        System.out.println("Thêm học viên thành công với ID: " + id);
+    }
+
+    public static void updateStudent() {
+        System.out.println("Nhập ID của học viên cần chỉnh sửa:");
+        int id = parseInt();
+
+        Student student = iStudentService.findById(id);
+
+        if (student == null) {
+            System.out.println("Học viên không tồn tại với ID: " + id);
+            return;
+        }
+
+        System.out.println("Nhập tên học sinh mới (hiện tại: " + student.getName() + "):");
+        String name = scanner.nextLine();
+        LocalDate dateOfBirth = promptForDate("Nhập ngày tháng năm sinh học viên mới (hiện tại: " + student.getDateOfBirth() + "):");
+        System.out.println("Nhập email học viên mới (hiện tại: " + student.getEmail() + "):");
+        String email = scanner.nextLine();
+        System.out.println("Nhập số điện thoại học viên mới (hiện tại: " + student.getPhoneNumber() + "):");
+        String phoneNumber = scanner.nextLine();
+        System.out.println("Nhập lớp của học viên mới (hiện tại: " + student.getClassName() + "):");
+        String className = scanner.nextLine();
+
+        student.setName(name);
+        student.setDateOfBirth(dateOfBirth);
+        student.setEmail(email);
+        student.setPhoneNumber(phoneNumber);
+        student.setClassName(className);
+
+        iStudentService.update(student);
+
+        System.out.println("Cập nhật học viên thành công với ID: " + id);
+    }
+
+    public static void deleteStudent() {
+        System.out.println("Nhập ID của học viên cần xoá:");
+        int id = parseInt();
+
+        if (iStudentService.delete(id)) {
+            System.out.println("Xoá học viên thành công với ID: " + id);
+        } else {
+            System.out.println("Học viên không tồn tại với ID: " + id);
+        }
+    }
+
+    private static int parseInt() {
+        while (true) {
+            try {
+                return Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Nhập không hợp lệ. Vui lòng nhập số nguyên:");
+            }
+        }
+    }
+    private static LocalDate promptForDate(String prompt) {
+        while (true) {
+            System.out.println(prompt);
+            try {
+                return LocalDate.parse(scanner.nextLine(), DATE_FORMATTER);
+            } catch (DateTimeParseException e) {
+                System.out.println("Ngày tháng không hợp lệ. Vui lòng nhập lại (định dạng: yyyy-MM-dd):");
+            }
+        }
     }
 }

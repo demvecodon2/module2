@@ -1,6 +1,4 @@
-package ss7.bai_tap.bai_tap2;
-
-import ss7.bai_tap.bai_tap1.Resizeable;
+package ss7.bai_tap.bai_tap1;
 
 public class Rectangle implements Resizeable {
     private double width;

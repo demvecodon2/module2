@@ -1,4 +1,4 @@
-package ss7.bai_tap.bai_tap2;
+package ss7.bai_tap.bai_tap1;
 
 public class RectangleTest {
     public static void main(String[] args) {
