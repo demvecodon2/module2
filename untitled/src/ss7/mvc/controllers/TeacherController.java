@@ -6,7 +6,7 @@ import ss7.mvc.repository.teacher_repo.TeacherRepository;
 import ss7.mvc.sevirce.teach_sevirce.TeacherService;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -25,7 +25,7 @@ public class TeacherController {
                     "5. Quay lại trang chủ\n" +
                     "Nhập lựa chọn:");
 
-            choice = getIntInput();
+            choice = Integer.parseInt(scanner.nextLine());
             switch (choice) {
                 case 1:
                     displayTeachers();
@@ -60,7 +60,7 @@ public class TeacherController {
 
     private static void addTeacher() {
         System.out.println("Nhập ID:");
-        int id = getIntInput();
+        int id = Integer.parseInt(scanner.nextLine());
         if (teacherService.exists(id)) {
             System.out.println("ID đã tồn tại.");
             return;
@@ -68,7 +68,7 @@ public class TeacherController {
         System.out.println("Nhập tên giảng viên:");
         String name = scanner.nextLine();
         System.out.println("Nhập ngày tháng năm sinh của giảng viên (yyyy-MM-dd):");
-        LocalDate dateOfBirth = getDateInput();
+        LocalDate dateOfBirth = LocalDate.parse(scanner.nextLine());
         System.out.println("Nhập Email giảng viên:");
         String email = scanner.nextLine();
         System.out.println("Nhập số điện thoại của giảng viên:");
@@ -83,7 +83,7 @@ public class TeacherController {
 
     private static void editTeacher() {
         System.out.println("Nhập ID giảng viên cần chỉnh sửa:");
-        int id = getIntInput();
+        int id = Integer.parseInt(scanner.nextLine());
         if (!teacherService.exists(id)) {
             System.out.println("ID không tồn tại.");
             return;
@@ -92,7 +92,7 @@ public class TeacherController {
         System.out.println("Nhập tên giảng viên mới:");
         String name = scanner.nextLine();
         System.out.println("Nhập ngày tháng năm sinh mới của giảng viên (yyyy-MM-dd):");
-        LocalDate dateOfBirth = getDateInput();
+        LocalDate dateOfBirth = LocalDate.parse(scanner.nextLine());
         System.out.println("Nhập Email mới của giảng viên:");
         String email = scanner.nextLine();
         System.out.println("Nhập số điện thoại mới của giảng viên:");
@@ -107,7 +107,7 @@ public class TeacherController {
 
     private static void deleteTeacher() {
         System.out.println("Nhập ID giảng viên cần xóa:");
-        int id = getIntInput();
+        int id = Integer.parseInt(scanner.nextLine());
         if (!teacherService.exists(id)) {
             System.out.println("ID không tồn tại.");
             return;
@@ -116,25 +116,7 @@ public class TeacherController {
         System.out.println("Đã xóa giảng viên.");
     }
 
-    private static int getIntInput() {
-        while (true) {
-            try {
-                return Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Nhập không hợp lệ. Vui lòng nhập số.");
-            }
-        }
-    }
 
-    private static LocalDate getDateInput() {
-        while (true) {
-            try {
-                return LocalDate.parse(scanner.nextLine());
-            } catch (DateTimeParseException e) {
-                System.out.println("Ngày tháng năm không hợp lệ. Vui lòng nhập theo định dạng yyyy-MM-dd.");
-            }
-        }
-    }
 
     public static void displayTeacher() {
         displayMenu();

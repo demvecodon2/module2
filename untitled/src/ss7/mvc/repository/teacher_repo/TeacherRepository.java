@@ -3,6 +3,7 @@ package ss7.mvc.repository.teacher_repo;
 import ss7.mvc.model.Teacher;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class TeacherRepository implements ITeacherRepository {
 
     @Override
     public List<Teacher> findAll() {
-        return new LinkedList<>(list);
+        return new ArrayList<>(list);
     }
 
     @Override
@@ -46,11 +47,22 @@ public class TeacherRepository implements ITeacherRepository {
         int index = getIndex(id);
         if (index >= 0 && updatedTeacher != null) {
             Teacher teacher = list.get(index);
-            teacher.setName(updatedTeacher.getName());
-            teacher.setDateOfBirth(updatedTeacher.getDateOfBirth());
-            teacher.setEmail(updatedTeacher.getEmail());
-            teacher.setPhoneNumber(updatedTeacher.getPhoneNumber());
-            teacher.setClassName(updatedTeacher.getClassName());
+
+            if (updatedTeacher.getName() != null) {
+                teacher.setName(updatedTeacher.getName());
+            }
+            if (updatedTeacher.getDateOfBirth() != null) {
+                teacher.setDateOfBirth(updatedTeacher.getDateOfBirth());
+            }
+            if (updatedTeacher.getEmail() != null) {
+                teacher.setEmail(updatedTeacher.getEmail());
+            }
+            if (updatedTeacher.getPhoneNumber() != null) {
+                teacher.setPhoneNumber(updatedTeacher.getPhoneNumber());
+            }
+            if (updatedTeacher.getClassName() != null) {
+                teacher.setClassName(updatedTeacher.getClassName());
+            }
         } else {
             throw new IllegalArgumentException("Invalid ID or teacher data");
         }
