@@ -9,7 +9,7 @@ public class main {
     public static void main(String[] args) {
         Student student = new Student("hiếu", 30,"csf");
         Student student1 = new Student("hiếu", 31,"csf");
-        Student student2 = new Student("hi2ếu", 32,"csf");
+        Student student2 = new Student("hi2ếu", 29,"csf");
         List<Student> lists = new ArrayList<Student>();
        lists.add(student);
        lists.add(student1);

@@ -1,4 +1,4 @@
-package ss7.mvc.sevirce.teach_sevirce;
+package ss7.mvc.sevirce.teach_sevirce.teacher_service;
 
 import ss7.mvc.model.Teacher;
 import ss7.mvc.repository.teacher_repo.ITeacherRepository;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 
-public class TeacherService implements ss7.mvc.service.teacher_service.ITeacherService {
+public class TeacherService implements ss7.mvc.sevirce.teach_sevirce.teacher_service.ITeacherService {
     private ITeacherRepository teacherRepository;
 
     public TeacherService(ITeacherRepository teacherRepository) {

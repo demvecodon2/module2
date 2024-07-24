@@ -1,12 +1,11 @@
 package ss7.mvc.controllers;
 
 import ss7.mvc.model.Teacher;
-import ss7.mvc.service.teacher_service.ITeacherService;
 import ss7.mvc.repository.teacher_repo.TeacherRepository;
-import ss7.mvc.sevirce.teach_sevirce.TeacherService;
+import ss7.mvc.sevirce.teach_sevirce.teacher_service.ITeacherService;
+import ss7.mvc.sevirce.teach_sevirce.teacher_service.TeacherService;
 
 import java.time.LocalDate;
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,7 +21,8 @@ public class TeacherController {
                     "2. Thêm mới giảng viên\n" +
                     "3. Chỉnh sửa thông tin giảng viên\n" +
                     "4. Xóa giảng viên\n" +
-                    "5. Quay lại trang chủ\n" +
+                    "5. Tìm kiếm giảng viên\n" + // Added search option
+                    "6. Quay lại trang chủ\n" +
                     "Nhập lựa chọn:");
 
             choice = Integer.parseInt(scanner.nextLine());
@@ -40,6 +40,9 @@ public class TeacherController {
                     deleteTeacher();
                     break;
                 case 5:
+                    searchTeacher(); // Call the search method
+                    break;
+                case 6:
                     System.out.println("Quay lại trang chủ...");
                     return;
                 default:
@@ -116,7 +119,22 @@ public class TeacherController {
         System.out.println("Đã xóa giảng viên.");
     }
 
+    private static void searchTeacher() {
+        System.out.println("Nhập từ khoá tìm kiếm (tên hoặc email):");
+        String keyword = scanner.nextLine().toLowerCase();
 
+        List<Teacher> teachers = teacherService.findAll();
+        List<Teacher> result = teachers.stream()
+                .filter(t -> t.getName().toLowerCase().contains(keyword) || t.getEmail().toLowerCase().contains(keyword))
+                .toList();
+
+        if (result.isEmpty()) {
+            System.out.println("Không tìm thấy giảng viên nào.");
+        } else {
+            System.out.println("Kết quả tìm kiếm:");
+            result.forEach(System.out::println);
+        }
+    }
 
     public static void displayTeacher() {
         displayMenu();

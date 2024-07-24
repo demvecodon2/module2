@@ -23,7 +23,8 @@ public class StudentController {
                     "2. Thêm mới học viên\n" +
                     "3. Chỉnh sửa thông tin\n" +
                     "4. Xoá học viên\n" +
-                    "5. Trở về trang chủ\n" +
+                    "5. tìm kiếm học viên\n"+
+                    "6. Trở về trang chủ\n" +
                     "Nhập lựa chọn của bạn:");
             choice = parseInt();
             switch (choice) {
@@ -39,6 +40,9 @@ public class StudentController {
                 case 4:
                     deleteStudent();
                     break;
+                case 6:
+
+                    break;
                 case 5:
                     return;
                 default:
@@ -48,6 +52,7 @@ public class StudentController {
     }
 
     public static void displayStudents() {
+        System.out.println("danh sách học viên ");
         List<Student> students = iStudentService.findAll();
         if (students.isEmpty()) {
             System.out.println("Danh sách học viên trống.");
@@ -59,6 +64,7 @@ public class StudentController {
     }
 
     public static void addStudent() {
+
         System.out.println("Nhập tên học sinh:");
         String name = scanner.nextLine();
         LocalDate dateOfBirth = promptForDate("Nhập ngày tháng năm sinh học viên (định dạng: yyyy-MM-dd):");

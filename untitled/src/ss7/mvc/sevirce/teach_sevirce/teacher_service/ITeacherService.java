@@ -1,4 +1,4 @@
-package ss7.mvc.service.teacher_service;
+package ss7.mvc.sevirce.teach_sevirce.teacher_service;
 
 import ss7.mvc.model.Teacher;
 
