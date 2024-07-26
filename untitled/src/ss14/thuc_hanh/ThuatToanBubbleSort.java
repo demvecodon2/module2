@@ -14,7 +14,7 @@ public class ThuatToanBubbleSort {
     }
 
     public static void main(String[] args) {
-        int[] arr = {5, 23, 13, 42, 11};
+        int[] arr = {5, 23, 13, 42, 11,11};
         System.out.println("mảng dùng bubble sort:");
         for (int num : arr) {
             System.out.println(num);
