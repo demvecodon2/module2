@@ -8,4 +8,20 @@ public interface IOtoService {
     void xoaOto(String bienKiemSoat);
     List<Oto> hienThiOto();
     Oto timKiemOto(String bienKiemSoat);
+
+    Oto findByBienKiemSoat(String bienKiemSoat);
+
+    void remove(String bienKiemSoat);
+
+    void addOto(Oto oto);
+
+    Oto[] getAllOto();
+
+    void removeOto(String bienKiemSoat);
+
+    Oto findOtoByBienKiemSoat(String bienKiemSoat);
+
+    Oto[] getAll();
+
+    List<Oto> timKiemOtoTheoKitu(String kieuTimKiem);
 }

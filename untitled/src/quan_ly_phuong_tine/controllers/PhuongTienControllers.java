@@ -5,7 +5,7 @@ import quan_ly_phuong_tine.model.Oto;
 import quan_ly_phuong_tine.model.XeMay;
 import quan_ly_phuong_tine.model.XeTai;
 import quan_ly_phuong_tine.repository.oto.OtoRepository;
-import quan_ly_phuong_tine.repository.oto.IOtoRepository;
+import quan_ly_phuong_tine.sevirce.Oto.IOtoService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class PhuongTienControllers {
     private static List<Oto> otoList = new ArrayList<>();
     private static List<XeMay> xeMayList = new ArrayList<>();
     private static List<HangSanXuat> hangSanXuatList = new ArrayList<>();
-    private static IOtoRepository otoRepository = (IOtoRepository) new OtoRepository(otoList);
+    private static IOtoService otoRepository = (IOtoService) new OtoRepository(otoList);
     private static final Scanner scanner = new Scanner(System.in);
 
     static {
@@ -131,24 +131,24 @@ public class PhuongTienControllers {
 
         for (XeTai xeTai : xeTaiList) {
             if (xeTai.getBienKiemSoat().equalsIgnoreCase(bienKiemSoat)) {
-                found = true;
                 xeTaiList.remove(xeTai);
+                found = true;
                 break;
             }
         }
 
         for (Oto oto : otoList) {
             if (oto.getBienKiemSoat().equalsIgnoreCase(bienKiemSoat)) {
-                found = true;
                 otoList.remove(oto);
+                found = true;
                 break;
             }
         }
 
         for (XeMay xeMay : xeMayList) {
             if (xeMay.getBienKiemSoat().equalsIgnoreCase(bienKiemSoat)) {
-                found = true;
                 xeMayList.remove(xeMay);
+                found = true;
                 break;
             }
         }
@@ -200,21 +200,32 @@ public class PhuongTienControllers {
     }
 
     public void themXeTai() {
+        // Gọi phương thức themPhuongTien() và xử lý riêng cho XeTai
+        System.out.println("Thêm xe tải:");
+        themPhuongTien();
     }
 
     public void themXeMay() {
+        // Gọi phương thức themPhuongTien() và xử lý riêng cho XeMay
+        System.out.println("Thêm xe máy:");
+        themPhuongTien();
     }
 
     public void themOto() {
+        // Gọi phương thức themPhuongTien() và xử lý riêng cho Ôtô
+        System.out.println("Thêm ôtô:");
+        themPhuongTien();
     }
 
     public void hienThiXeTai() {
+        hienThiPhuongTien(); // Hiển thị thông tin cho XeTai
     }
 
     public void hienThiOto() {
+        hienThiPhuongTien(); // Hiển thị thông tin cho Ôtô
     }
 
     public void hienThiXeMay() {
-
+        hienThiPhuongTien(); // Hiển thị thông tin cho XeMay
     }
 }

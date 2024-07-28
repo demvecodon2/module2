@@ -8,4 +8,18 @@ public interface IXeTaiService {
     void xoaXeTai(String bienKiemSoat);
     List<XeTai> hienThiXeTai();
     XeTai timKiemXeTai(String bienKiemSoat);
+
+    XeTai findByBienKiemSoat(String bienKiemSoat);
+
+    void remove(String bienKiemSoat);
+
+    void addXeTai(XeTai xeTai);
+
+    XeTai[] getAllXeTai();
+
+    void removeXeTai(String bienKiemSoat);
+
+    XeTai findXeTaiByBienKiemSoat(String bienKiemSoat);
+
+    List<XeTai> timKiemXeTaiTheoKitu(String kieuTimKiem);
 }

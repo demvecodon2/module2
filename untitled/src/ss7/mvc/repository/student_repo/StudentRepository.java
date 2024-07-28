@@ -1,32 +1,31 @@
 package ss7.mvc.repository.student_repo;
 
 import ss7.mvc.model.Student;
-import ss7.mvc.model.Teacher;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class StudentRepository implements IStudenRepository {
-    private static List<Teacher> list = new LinkedList<Teacher>();
-    private static int teacherId = 1;
+    private static List<Student> list = new ArrayList<>();
+    private static int studentId = 1;
 
     static {
-        Teacher s1 = new Teacher(teacherId++, "Hieu", LocalDate.parse("2001-10-03"), "hieudh@gmail.com", "017256457", "c032");
-        Teacher s2 = new Teacher(teacherId++, "Hiseu", LocalDate.parse("1999-10-03"), "hiedudh@gmail.com", "017256457", "c032");
+        // Khởi tạo dữ liệu mẫu
+        Student s1 = new Student(studentId++, "Hieu", LocalDate.parse("2001-10-03"), "hieudh@gmail.com", "017256457", "c032");
+        Student s2 = new Student(studentId++, "Hiseu", LocalDate.parse("1999-10-03"), "hiedudh@gmail.com", "017256457", "c032");
         list.add(s1);
         list.add(s2);
     }
 
     @Override
     public List<Student> findAll() {
-        return new ArrayList<>(teacherId);
+        return new ArrayList<>(list); // Trả về bản sao danh sách
     }
 
     @Override
     public void add(Student student) {
-
+        student.setId(studentId++); // Cập nhật ID và tăng lên
+        list.add(student);
     }
 
     @Override
@@ -36,21 +35,26 @@ public class StudentRepository implements IStudenRepository {
 
     @Override
     public boolean exists(int id) {
-        return false;
+        return list.stream().anyMatch(student -> student.getId() == id);
     }
 
     @Override
     public void update(Student student) {
-
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId() == student.getId()) {
+                list.set(i, student);
+                return;
+            }
+        }
     }
 
     @Override
     public void delete(int id) {
-
+        list.removeIf(student -> student.getId() == id);
     }
 
     @Override
     public Student findById(int id) {
-        return null;
+        return list.stream().filter(student -> student.getId() == id).findFirst().orElse(null);
     }
 }

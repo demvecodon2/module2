@@ -6,18 +6,19 @@ import quan_ly_phuong_tine.model.XeMay;
 import quan_ly_phuong_tine.model.XeTai;
 import quan_ly_phuong_tine.sevirce.Oto.IOtoService;
 import quan_ly_phuong_tine.sevirce.Oto.OtoService;
-
+import quan_ly_phuong_tine.sevirce.xe_may.IXeMayService;
 import quan_ly_phuong_tine.sevirce.xe_may.XeMayService;
 import quan_ly_phuong_tine.sevirce.xe_tai.IXeTaiService;
 import quan_ly_phuong_tine.sevirce.xe_tai.XeTaiService;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 public class QuanLyPhuongTien {
     private static final Scanner scanner = new Scanner(System.in);
     private static final IOtoService otoService = new OtoService();
-    private static final tham_khao.sevirce.XeMay.IXeMayService xeMayService = new XeMayService();
+    private static final IXeMayService xeMayService = new XeMayService();
     private static final IXeTaiService xeTaiService = new XeTaiService();
 
     public static void main(String[] args) {
@@ -50,6 +51,20 @@ public class QuanLyPhuongTien {
         }
     }
 
+    private static void hienThiDanhSachPhuongTien() {
+        System.out.println("Danh sách ô tô:");
+        List<Oto> otoList = otoService.hienThiOto();
+        otoList.forEach(System.out::println);
+
+        System.out.println("Danh sách xe máy:");
+        List<XeMay> xeMayList = xeMayService.hienThiXeMay();
+        xeMayList.forEach(System.out::println);
+
+        System.out.println("Danh sách xe tải:");
+        List<XeTai> xeTaiList = xeTaiService.hienThiXeTai();
+        xeTaiList.forEach(System.out::println);
+    }
+
     private static void themMoiPhuongTien() {
         System.out.println("Chọn loại phương tiện cần thêm:");
         System.out.println("1. Thêm ôtô");
@@ -74,8 +89,24 @@ public class QuanLyPhuongTien {
     private static void themOto() {
         System.out.println("Nhập biển kiểm soát:");
         String bienKiemSoat = scanner.nextLine();
-        System.out.println("Nhập năm sản xuất:");
-        int namSanXuat = Integer.parseInt(scanner.nextLine());
+
+        int namSanXuat = -1;
+        boolean isValid = false;
+        while (!isValid) {
+            System.out.println("Nhập năm sản xuất (ví dụ: 2024):");
+            try {
+                namSanXuat = Integer.parseInt(scanner.nextLine());
+                int currentYear = LocalDate.now().getYear();
+                if (namSanXuat >= 1900 && namSanXuat <= currentYear) {
+                    isValid = true;
+                } else {
+                    System.out.println("Năm sản xuất không hợp lệ. Vui lòng nhập một năm từ 1900 đến " + currentYear + ".");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Định dạng năm không hợp lệ. Vui lòng nhập một số nguyên.");
+            }
+        }
+
         System.out.println("Nhập tên chủ sở hữu:");
         String chuSoHuu = scanner.nextLine();
         System.out.println("Nhập kiểu xe:");
@@ -83,10 +114,10 @@ public class QuanLyPhuongTien {
         System.out.println("Nhập số chỗ ngồi:");
         int choNgoi = Integer.parseInt(scanner.nextLine());
 
-        // Example HangSanXuat, you should replace this with actual data
         HangSanXuat hangSanXuat = new HangSanXuat("HSX1", "Toyota", "Japan");
         Oto oto = new Oto(bienKiemSoat, hangSanXuat, LocalDate.of(namSanXuat, 1, 1), chuSoHuu, choNgoi, kieuXe);
         otoService.themOto(oto);
+        System.out.println("Đã thêm ô tô mới thành công!");
     }
 
     private static void themXeMay() {
@@ -99,10 +130,10 @@ public class QuanLyPhuongTien {
         System.out.println("Nhập công suất:");
         double congSuat = Double.parseDouble(scanner.nextLine());
 
-        // Example HangSanXuat, you should replace this with actual data
         HangSanXuat hangSanXuat = new HangSanXuat("HSX1", "Honda", "Japan");
         XeMay xeMay = new XeMay(bienKiemSoat, hangSanXuat, LocalDate.of(namSanXuat, 1, 1), chuSoHuu, congSuat);
         xeMayService.themXeMay(xeMay);
+        System.out.println("Đã thêm xe máy mới thành công!");
     }
 
     private static void themXeTai() {
@@ -115,48 +146,38 @@ public class QuanLyPhuongTien {
         System.out.println("Nhập tải trọng:");
         double taiTrong = Double.parseDouble(scanner.nextLine());
 
-        // Example HangSanXuat, you should replace this with actual data
         HangSanXuat hangSanXuat = new HangSanXuat("HSX2", "Ford", "USA");
         XeTai xeTai = new XeTai(bienKiemSoat, hangSanXuat, LocalDate.of(namSanXuat, 1, 1), chuSoHuu, taiTrong);
         xeTaiService.themXeTai(xeTai);
+        System.out.println("Đã thêm xe tải mới thành công!");
     }
 
-    private static void hienThiDanhSachPhuongTien() {
-        System.out.println("Chọn loại phương tiện để hiện thị:");
-        System.out.println("1. Hiện thị xe tải");
-        System.out.println("2. Hiện thị ôtô");
-        System.out.println("3. Hiện thị xe máy");
-        int displayChoice = Integer.parseInt(scanner.nextLine());
-        switch (displayChoice) {
-            case 1:
-                hienThiXeTai();
-                break;
-            case 2:
-                hienThiOto();
-                break;
-            case 3:
-                hienThiXeMay();
-                break;
-            default:
-                System.out.println("Lựa chọn không hợp lệ");
+    private static void timKiemPhuongTien() {
+        System.out.println("Nhập ký tự hoặc biển kiểm soát cần tìm:");
+        String kieuTimKiem = scanner.nextLine();
+
+        List<XeTai> xeTaiList = xeTaiService.timKiemXeTaiTheoKitu(kieuTimKiem);
+        if (!xeTaiList.isEmpty()) {
+            System.out.println("Danh sách xe tải tìm thấy:");
+            xeTaiList.forEach(System.out::println);
+        } else {
+            System.out.println("Không tìm thấy xe tải nào.");
         }
-    }
 
-    private static void hienThiXeTai() {
-        for (XeTai xeTai : xeTaiService.hienThiXeTai()) {
-            System.out.println(xeTai);
+        List<Oto> otoList = otoService.timKiemOtoTheoKitu(kieuTimKiem);
+        if (!otoList.isEmpty()) {
+            System.out.println("Danh sách ô tô tìm thấy:");
+            otoList.forEach(System.out::println);
+        } else {
+            System.out.println("Không tìm thấy ô tô nào.");
         }
-    }
 
-    private static void hienThiOto() {
-        for (Oto oto : otoService.hienThiOto()) {
-            System.out.println(oto);
-        }
-    }
-
-    private static void hienThiXeMay() {
-        for (XeMay xeMay : xeMayService.hienThiXeMay()) {
-            System.out.println(xeMay);
+        List<XeMay> xeMayList = xeMayService.timKiemXeMayTheoKitu(kieuTimKiem);
+        if (!xeMayList.isEmpty()) {
+            System.out.println("Danh sách xe máy tìm thấy:");
+            xeMayList.forEach(System.out::println);
+        } else {
+            System.out.println("Không tìm thấy xe máy nào.");
         }
     }
 
@@ -171,43 +192,18 @@ public class QuanLyPhuongTien {
         switch (deleteChoice) {
             case 1:
                 xeTaiService.xoaXeTai(bienKiemSoat);
+                System.out.println("Đã xóa xe tải với biển kiểm soát: " + bienKiemSoat);
                 break;
             case 2:
                 otoService.xoaOto(bienKiemSoat);
+                System.out.println("Đã xóa ô tô với biển kiểm soát: " + bienKiemSoat);
                 break;
             case 3:
                 xeMayService.xoaXeMay(bienKiemSoat);
+                System.out.println("Đã xóa xe máy với biển kiểm soát: " + bienKiemSoat);
                 break;
             default:
                 System.out.println("Lựa chọn không hợp lệ");
         }
-    }
-
-    private static void timKiemPhuongTien() {
-        System.out.println("Nhập biển kiểm soát cần tìm:");
-        String bienKiemSoat = scanner.nextLine();
-
-        XeTai xeTai = xeTaiService.timKiemXeTai(bienKiemSoat);
-        if (xeTai != null) {
-            System.out.println("Tìm thấy xe tải:");
-            System.out.println(xeTai);
-            return;
-        }
-
-        Oto oto = otoService.timKiemOto(bienKiemSoat);
-        if (oto != null) {
-            System.out.println("Tìm thấy ôtô:");
-            System.out.println(oto);
-            return;
-        }
-
-        XeMay xeMay = xeMayService.timKiemXeMay(bienKiemSoat);
-        if (xeMay != null) {
-            System.out.println("Tìm thấy xe máy:");
-            System.out.println(xeMay);
-            return;
-        }
-
-        System.out.println("Không có phương tiện nào được tìm thấy.");
     }
 }
