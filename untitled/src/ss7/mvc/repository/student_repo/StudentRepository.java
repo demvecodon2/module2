@@ -10,16 +10,17 @@ public class StudentRepository implements IStudenRepository {
     private static int studentId = 1;
 
     static {
-        // Khởi tạo dữ liệu mẫu
+
         Student s1 = new Student(studentId++, "Hieu", LocalDate.parse("2001-10-03"), "hieudh@gmail.com", "017256457", "c032");
         Student s2 = new Student(studentId++, "Hiseu", LocalDate.parse("1999-10-03"), "hiedudh@gmail.com", "017256457", "c032");
         list.add(s1);
         list.add(s2);
     }
 
+
     @Override
     public List<Student> findAll() {
-        return new ArrayList<>(list); // Trả về bản sao danh sách
+        return new ArrayList<>(list);
     }
 
     @Override

@@ -2,6 +2,7 @@ package ss7.mvc.repository.teacher_repo;
 
 import ss7.mvc.model.Teacher;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -10,12 +11,50 @@ import java.util.List;
 public class TeacherRepository implements ITeacherRepository {
     private static List<Teacher> list = new LinkedList<>();
     private static int teacherId = 1;
+    private static final String CSV_FILE_NAME = "teacher_repo.csv";
 
     static {
-        Teacher s1 = new Teacher(teacherId++, "Hieu", LocalDate.parse("2001-10-03"), "hieudh@gmail.com", "017256457", "c032");
-        Teacher s2 = new Teacher(teacherId++, "Hiseu", LocalDate.parse("1999-10-03"), "hiedudh@gmail.com", "017256457", "c032");
-        list.add(s1);
-        list.add(s2);
+        loadData();
+    }
+
+    private static void loadData() {
+        // Load data from CSV file
+        File file = new File(CSV_FILE_NAME);
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                reader.readLine(); // Skip header line
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts.length == 6) {
+                        int id = Integer.parseInt(parts[0].trim());
+                        String name = parts[1].trim();
+                        LocalDate dob = LocalDate.parse(parts[2].trim());
+                        String email = parts[3].trim();
+                        String phone = parts[4].trim();
+                        String className = parts[5].trim();
+                        Teacher teacher = new Teacher(id, name, dob, email, phone, className);
+                        list.add(teacher);
+                        teacherId = Math.max(teacherId, id + 1); // Update teacherId
+                    }
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Error reading data from file", e);
+            }
+        }
+    }
+
+    private static void saveData() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE_NAME))) {
+            writer.write("id,name,dateOfBirth,email,phoneNumber,className");
+            writer.newLine();
+            for (Teacher teacher : list) {
+                writer.write(teacher.toCsvString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing data to file", e);
+        }
     }
 
     @Override
@@ -28,6 +67,7 @@ public class TeacherRepository implements ITeacherRepository {
         if (teacher != null) {
             teacher.setId(teacherId++);
             list.add(teacher);
+            saveData();
         } else {
             throw new IllegalArgumentException("Teacher cannot be null");
         }
@@ -37,7 +77,9 @@ public class TeacherRepository implements ITeacherRepository {
     public Teacher delete(int id) {
         int index = getIndex(id);
         if (index >= 0) {
-            return list.remove(index);
+            Teacher removedTeacher = list.remove(index);
+            saveData();
+            return removedTeacher;
         }
         return null;
     }
@@ -63,6 +105,7 @@ public class TeacherRepository implements ITeacherRepository {
             if (updatedTeacher.getClassName() != null) {
                 teacher.setClassName(updatedTeacher.getClassName());
             }
+            saveData();
         } else {
             throw new IllegalArgumentException("Invalid ID or teacher data");
         }
@@ -85,6 +128,6 @@ public class TeacherRepository implements ITeacherRepository {
 
     @Override
     public void updateData() {
-
+        saveData();
     }
 }

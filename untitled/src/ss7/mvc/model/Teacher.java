@@ -35,9 +35,25 @@ public class Teacher extends Person {
 
     @Override
     public String toString() {
+        // Chuyển đổi thông tin của teacher thành chuỗi để hiển thị
         return "Teacher{" +
                 "id=" + id +
+                ", name='" + getName() + '\'' + // Sử dụng getName() từ lớp cha Person
+                ", dateOfBirth=" + getDateOfBirth() + // Sử dụng getDateOfBirth() từ lớp cha Person
+                ", email='" + getEmail() + '\'' + // Sử dụng getEmail() từ lớp cha Person
+                ", phoneNumber='" + getPhoneNumber() + '\'' + // Sử dụng getPhoneNumber() từ lớp cha Person
                 ", className='" + className + '\'' +
-                '}' + super.toString();
+                '}';
+    }
+
+    public String toCsvString() {
+        // Chuyển đổi thông tin của teacher thành chuỗi CSV
+        int dateOfBirth = 0;
+        return id + "," +
+                "\"" + getName() + "\"," + // Bao quanh tên bằng dấu ngoặc kép để xử lý các dấu phẩy
+                dateOfBirth + "," +
+                "\"" + getEmail() + "\"," +
+                "\"" + getPhoneNumber() + "\"," +
+                "\"" + className + "\"";
     }
 }
