@@ -59,4 +59,5 @@ public abstract class Person {
                 '}';
     }
 
+    public abstract Object toCsvString();
 }

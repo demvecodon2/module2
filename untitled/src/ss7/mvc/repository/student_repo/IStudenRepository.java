@@ -9,8 +9,6 @@ public interface IStudenRepository {
 
     void add(Student student);
 
-    boolean exists(String id);
-
     boolean exists(int id);
 
     void update(Student student);

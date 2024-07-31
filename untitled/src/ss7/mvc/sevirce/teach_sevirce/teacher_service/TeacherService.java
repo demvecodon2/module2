@@ -1,13 +1,23 @@
 package ss7.mvc.sevirce.teach_sevirce.teacher_service;
 
+import ss7.mvc.model.Student;
 import ss7.mvc.model.Teacher;
 import ss7.mvc.repository.teacher_repo.ITeacherRepository;
+import ss7.mvc.repository.teacher_repo.TeacherRepository;
 
+
+import ss7.mvc.model.Teacher;
+import ss7.mvc.repository.teacher_repo.ITeacherRepository;
+import ss7.mvc.util.ReadAndWrite;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
 
-
-public class TeacherService implements ss7.mvc.sevirce.teach_sevirce.teacher_service.ITeacherService {
+public class TeacherService implements ITeacherService {
+    private static final String TEACHER_FILE = "src/ss7/mvc/data/teacher.csv";
+    private static Scanner scanner = new Scanner(System.in);
     private ITeacherRepository teacherRepository;
 
     public TeacherService(ITeacherRepository teacherRepository) {
@@ -15,51 +25,70 @@ public class TeacherService implements ss7.mvc.sevirce.teach_sevirce.teacher_ser
     }
 
     @Override
-    public void add(Teacher teacher) {
-        if (teacher != null) {
-            teacherRepository.add(teacher);
-        } else {
-            throw new IllegalArgumentException("Teacher cannot be null");
+    public List<Teacher> findAll() {
+        List<String> stringList = ReadAndWrite.readFileCSVToListString(TEACHER_FILE);
+        List<Teacher> teacherList = new ArrayList<>();
+        for (String string : stringList) {
+            String[] array = string.split(",");
+            Teacher teacher = new Teacher(
+                    Integer.parseInt(array[0]),
+                    array[1],
+                    LocalDate.parse(array[2]),
+                    array[3],
+                    array[4],
+                    array[5]
+            );
+            teacherList.add(teacher);
         }
+        return teacherList;
     }
 
     @Override
-    public ArrayList<Teacher> findAll() {
-        return (ArrayList<Teacher>) teacherRepository.findAll();
+    public void add(Teacher teacher) {
+        List<Teacher> teachers = findAll();
+        teachers.add(teacher);
+        List<String> stringList = new ArrayList<>();
+        for (Teacher t : teachers) {
+            stringList.add(t.toCsvString());
+        }
+        ReadAndWrite.writeFileCSVToListString(TEACHER_FILE, stringList);
     }
 
     @Override
     public boolean exists(int id) {
-        return !teacherRepository.isEmpty(id);
+        return findAll().stream().anyMatch(teacher -> teacher.getId() == id);
     }
 
     @Override
     public void edit(Teacher teacher) {
-        if (teacher != null) {
-            int id = teacher.getId();
-            if (exists(id)) {
-                int index = teacherRepository.getIndex(id);
-                teacherRepository.update(index, teacher);
-            } else {
-                throw new IllegalArgumentException("Teacher with ID " + id + " does not exist.");
+        List<Teacher> teachers = findAll();
+        for (int i = 0; i < teachers.size(); i++) {
+            if (teachers.get(i).getId() == teacher.getId()) {
+                teachers.set(i, teacher);
+                break;
             }
-        } else {
-            throw new IllegalArgumentException("Teacher cannot be null");
         }
+        List<String> stringList = new ArrayList<>();
+        for (Teacher t : teachers) {
+            stringList.add(t.toCsvString());
+        }
+        ReadAndWrite.writeFileCSVToListString(TEACHER_FILE, stringList);
     }
 
     @Override
     public void delete(int id) {
-        if (exists(id)) {
-            teacherRepository.delete(id);
-        } else {
-            throw new IllegalArgumentException("Teacher with ID " + id + " does not exist.");
+        List<Teacher> teachers = findAll();
+        teachers.removeIf(teacher -> teacher.getId() == id);
+        List<String> stringList = new ArrayList<>();
+        for (Teacher t : teachers) {
+            stringList.add(t.toCsvString());
         }
+        ReadAndWrite.writeFileCSVToListString(TEACHER_FILE, stringList);
     }
 
     @Override
     public Teacher findById(int id) {
-        return teacherRepository.findAll().stream()
+        return findAll().stream()
                 .filter(teacher -> teacher.getId() == id)
                 .findFirst()
                 .orElse(null);

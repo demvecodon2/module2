@@ -1,6 +1,7 @@
 package ss7.mvc.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Student {
     private int id;
@@ -10,7 +11,8 @@ public class Student {
     private String phoneNumber;
     private String className;
 
-    public Student(int id, String name, LocalDate dateOfBirth, String email, String phoneNumber, String className) {
+    // Constructor
+    public Student(String name, LocalDate dateOfBirth, String email, String phoneNumber, String className) {
         this.id = id;
         this.name = name;
         this.dateOfBirth = dateOfBirth;
@@ -19,6 +21,7 @@ public class Student {
         this.className = className;
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -67,7 +70,7 @@ public class Student {
         this.className = className;
     }
 
-
+    @Override
     public String toString() {
         return "Student{" +
                 "id=" + id +
@@ -78,6 +81,25 @@ public class Student {
                 ", className='" + className + '\'' +
                 '}';
     }
+
+    // Converts Student object to a CSV-compatible row format
+    public String toCSVRow() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return id + "," +
+                name + "," +
+                dateOfBirth.format(formatter) + "," +
+                email + "," +
+                phoneNumber + "," +
+                className;
+    }
+
+    public String toCsvString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return id + "," +
+                name + "," +
+                dateOfBirth.format(formatter) + "," +
+                email + "," +
+                phoneNumber + "," +
+                className;
+    }
 }
-
-

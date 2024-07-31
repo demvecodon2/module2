@@ -84,7 +84,6 @@ public class TeacherController {
             String phoneNumber = scanner.nextLine();
             System.out.println("Nhập lớp dạy:");
             String className = scanner.nextLine();
-
             Teacher teacher = new Teacher(id, name, dateOfBirth, email, phoneNumber, className);
             teacherService.add(teacher);
             System.out.println("Đã thêm giảng viên.");
@@ -135,22 +134,80 @@ public class TeacherController {
             }
             teacherService.delete(id);
             System.out.println("Đã xóa giảng viên.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void searchTeacher() {
+        System.out.println("Chọn tiêu chí tìm kiếm:");
+        System.out.println("1. Tìm theo ID");
+        System.out.println("2. Tìm theo tên");
+        System.out.println("3. Tìm theo email");
+        System.out.print("Nhập lựa chọn của bạn: ");
+
+        int criterion = Integer.parseInt(scanner.nextLine());
+
+        switch (criterion) {
+            case 1:
+                searchById();
+                break;
+            case 2:
+                searchByName();
+                break;
+            case 3:
+                searchByEmail();
+                break;
+            default:
+                System.out.println("Lựa chọn không hợp lệ.");
+                break;
+        }
+    }
+
+    private static void searchById() {
+        try {
+            System.out.println("Nhập ID giảng viên cần tìm:");
+            int id = Integer.parseInt(scanner.nextLine());
+            Teacher teacher = teacherService.findById(id);
+            if (teacher == null) {
+                System.out.println("Không tìm thấy giảng viên với ID: " + id);
+            } else {
+                System.out.println("Kết quả tìm kiếm:");
+                System.out.println(teacher);
+            }
         } catch (NumberFormatException e) {
             System.out.println("Lỗi nhập liệu: ID phải là số nguyên.");
         }
     }
 
-    private static void searchTeacher() {
-        System.out.println("Nhập từ khoá tìm kiếm (tên hoặc email):");
+    private static void searchByName() {
+        System.out.println("Nhập từ khoá tìm kiếm (tên):");
         String keyword = scanner.nextLine().toLowerCase();
 
         List<Teacher> teachers = teacherService.findAll();
         List<Teacher> result = teachers.stream()
-                .filter(t -> t.getName().toLowerCase().contains(keyword) || t.getEmail().toLowerCase().contains(keyword))
+                .filter(t -> t.getName().toLowerCase().contains(keyword))
                 .toList();
 
         if (result.isEmpty()) {
-            System.out.println("Không tìm thấy giảng viên nào.");
+            System.out.println("Không tìm thấy giảng viên nào với tên chứa: " + keyword);
+        } else {
+            System.out.println("Kết quả tìm kiếm:");
+            result.forEach(System.out::println);
+        }
+    }
+
+    private static void searchByEmail() {
+        System.out.println("Nhập từ khoá tìm kiếm (email):");
+        String keyword = scanner.nextLine().toLowerCase();
+
+        List<Teacher> teachers = teacherService.findAll();
+        List<Teacher> result = teachers.stream()
+                .filter(t -> t.getEmail().toLowerCase().contains(keyword))
+                .toList();
+
+        if (result.isEmpty()) {
+            System.out.println("Không tìm thấy giảng viên nào với email chứa: " + keyword);
         } else {
             System.out.println("Kết quả tìm kiếm:");
             result.forEach(System.out::println);

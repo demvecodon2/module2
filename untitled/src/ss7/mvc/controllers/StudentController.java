@@ -1,5 +1,6 @@
 package ss7.mvc.controllers;
 
+
 import ss7.mvc.model.Student;
 import ss7.mvc.sevirce.student_sevirce.IStudentService;
 import ss7.mvc.sevirce.student_sevirce.StudentService;
@@ -40,10 +41,10 @@ public class StudentController {
                 case 4:
                     deleteStudent();
                     break;
-                case 6:
-
-                    break;
                 case 5:
+                    seachSutudent();
+                    break;
+                case 6:
                     return;
                 default:
                     System.out.println("Lựa chọn không hợp lệ, vui lòng chọn lại.");
@@ -77,7 +78,7 @@ public class StudentController {
 
         int id = iStudentService.getNextId();
 
-        Student student = new Student(id, name, dateOfBirth, email, phoneNumber, className);
+        Student student = new Student(name, dateOfBirth, email, phoneNumber, className);
         iStudentService.add(student);
 
         System.out.println("Thêm học viên thành công với ID: " + id);
@@ -123,6 +124,18 @@ public class StudentController {
             System.out.println("Xoá học viên thành công với ID: " + id);
         } else {
             System.out.println("Học viên không tồn tại với ID: " + id);
+        }
+    }
+    private static void seachSutudent(){
+        System.out.println(" nhập từ khoá tìm kiếm(tên hoặc email):");
+        String keyword = scanner.nextLine().toLowerCase();
+        List<Student> students= iStudentService.findAll();
+        List<Student> result = students.stream().filter(t -> t.getName().toLowerCase().contains(keyword)||t.getEmail().toLowerCase().contains(keyword)).toList();
+        if (result.isEmpty()) {
+            System.out.println("ko tìm thấy");
+        }else {
+            System.out.println("KẾT QUẢ TÌM KIẾM :");
+            result.forEach(System.out::println);
         }
     }
 

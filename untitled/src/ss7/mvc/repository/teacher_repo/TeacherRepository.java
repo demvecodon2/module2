@@ -1,133 +1,96 @@
 package ss7.mvc.repository.teacher_repo;
 
 import ss7.mvc.model.Teacher;
+import ss7.mvc.util.ReadAndWrite;
 
-import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class TeacherRepository implements ITeacherRepository {
-    private static List<Teacher> list = new LinkedList<>();
-    private static int teacherId = 1;
-    private static final String CSV_FILE_NAME = "teacher_repo.csv";
 
-    static {
-        loadData();
-    }
-
-    private static void loadData() {
-        // Load data from CSV file
-        File file = new File(CSV_FILE_NAME);
-        if (file.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                String line;
-                reader.readLine(); // Skip header line
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(",");
-                    if (parts.length == 6) {
-                        int id = Integer.parseInt(parts[0].trim());
-                        String name = parts[1].trim();
-                        LocalDate dob = LocalDate.parse(parts[2].trim());
-                        String email = parts[3].trim();
-                        String phone = parts[4].trim();
-                        String className = parts[5].trim();
-                        Teacher teacher = new Teacher(id, name, dob, email, phone, className);
-                        list.add(teacher);
-                        teacherId = Math.max(teacherId, id + 1); // Update teacherId
-                    }
-                }
-            } catch (IOException e) {
-                throw new RuntimeException("Error reading data from file", e);
-            }
-        }
-    }
-
-    private static void saveData() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE_NAME))) {
-            writer.write("id,name,dateOfBirth,email,phoneNumber,className");
-            writer.newLine();
-            for (Teacher teacher : list) {
-                writer.write(teacher.toCsvString());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Error writing data to file", e);
-        }
-    }
+    private static final String CSV_FILE_TEACHER = "src/ss7/mvc/data/teacher.csv";
 
     @Override
     public List<Teacher> findAll() {
-        return new ArrayList<>(list);
+        List<String> stringList = ReadAndWrite.readFileCSVToListString(CSV_FILE_TEACHER);
+        List<Teacher> teacherList = new ArrayList<>();
+        for (String string : stringList) {
+            String[] stringArray = string.split(",");
+            if (stringArray.length == 6) {
+                try {
+                    int id = Integer.parseInt(stringArray[0]);
+                    LocalDate localDate = LocalDate.parse(stringArray[2]);
+                    Teacher teacher = new Teacher(id, stringArray[1], localDate, stringArray[3], stringArray[4], stringArray[5]);
+                    teacherList.add(teacher);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
+
+        return teacherList;
     }
 
     @Override
     public void add(Teacher teacher) {
-        if (teacher != null) {
-            teacher.setId(teacherId++);
-            list.add(teacher);
-            saveData();
-        } else {
-            throw new IllegalArgumentException("Teacher cannot be null");
-        }
+        List<String> stringList = new ArrayList<>();
+        stringList.add(teacher.toCsvString());
+        ReadAndWrite.writeFileCSVToListString(CSV_FILE_TEACHER, stringList);
+
+
     }
 
     @Override
-    public Teacher delete(int id) {
-        int index = getIndex(id);
-        if (index >= 0) {
-            Teacher removedTeacher = list.remove(index);
-            saveData();
-            return removedTeacher;
-        }
-        return null;
-    }
+    public boolean exists(int id) {
+       List<Teacher> teacherList = findAll();
+
+               return teacherList.stream().anyMatch(teacher -> teacher.getId() == id);
+           }
+
 
     @Override
     public void update(int id, Teacher updatedTeacher) {
-        int index = getIndex(id);
-        if (index >= 0 && updatedTeacher != null) {
-            Teacher teacher = list.get(index);
-
-            if (updatedTeacher.getName() != null) {
-                teacher.setName(updatedTeacher.getName());
-            }
-            if (updatedTeacher.getDateOfBirth() != null) {
-                teacher.setDateOfBirth(updatedTeacher.getDateOfBirth());
-            }
-            if (updatedTeacher.getEmail() != null) {
-                teacher.setEmail(updatedTeacher.getEmail());
-            }
-            if (updatedTeacher.getPhoneNumber() != null) {
-                teacher.setPhoneNumber(updatedTeacher.getPhoneNumber());
-            }
-            if (updatedTeacher.getClassName() != null) {
-                teacher.setClassName(updatedTeacher.getClassName());
-            }
-            saveData();
-        } else {
-            throw new IllegalArgumentException("Invalid ID or teacher data");
-        }
-    }
-
-    @Override
-    public boolean isEmpty(int id) {
-        return getIndex(id) == -1;
-    }
-
-    @Override
-    public int getIndex(int id) {
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId() == id) {
-                return i;
+        List<String> stringList = new ArrayList<>();
+        for (int i = 0; i < stringList.size(); i++) {
+            if (stringList.get(i).equals(updatedTeacher.toCsvString())) {
+                stringList.set(i, updatedTeacher.toCsvString());
             }
         }
-        return -1;
+        List<Teacher> teacherList = new ArrayList<>();
+        for (int i = 0; i < stringList.size(); i++) {
+            stringList.set(i, stringList.get(i).replace(updatedTeacher.toCsvString(), ""));
+        }
+        stringList.add(updatedTeacher.toCsvString());
+
+
+
+    }
+    @Override
+    public void delete(int id) {
+        List<String> stringList = new ArrayList<>();
+        for (int i = 0; i < stringList.size(); i++) {
+            if (stringList.get(i).equals(id)) {
+                teacherList.remove(i);
+            }
+        }
+        List<Teacher> teacherList = new ArrayList<>();
+        for (Teacher teacher : teacherList) {
+            stringList.add(teacher.toCsvString());
+        }
+        ReadAndWrite.writeFileCSVToListString(CSV_FILE_TEACHER, stringList);
+    }
+    @Override
+    public Teacher findById(int id) {
+        List<Teacher> teacherList = findAll();
+
+        return teacherList.stream().filter(teacher -> teacher.getId() == id).findFirst().orElse(null);
+
     }
 
-    @Override
-    public void updateData() {
-        saveData();
-    }
+
+
 }

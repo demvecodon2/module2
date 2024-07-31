@@ -88,7 +88,7 @@ public class PhuongTienControllers {
         int choice = Integer.parseInt(scanner.nextLine());
 
         switch (choice) {
-            case 1: // Hiển thị xe tải
+            case 1:
                 if (xeTaiList.isEmpty()) {
                     System.out.println("Danh sách xe tải trống.");
                 } else {
@@ -98,7 +98,7 @@ public class PhuongTienControllers {
                     }
                 }
                 break;
-            case 2: // Hiển thị ôtô
+            case 2:
                 if (otoList.isEmpty()) {
                     System.out.println("Danh sách ôtô trống.");
                 } else {
@@ -108,7 +108,7 @@ public class PhuongTienControllers {
                     }
                 }
                 break;
-            case 3: // Hiển thị xe máy
+            case 3:
                 if (xeMayList.isEmpty()) {
                     System.out.println("Danh sách xe máy trống.");
                 } else {
@@ -200,32 +200,32 @@ public class PhuongTienControllers {
     }
 
     public void themXeTai() {
-        // Gọi phương thức themPhuongTien() và xử lý riêng cho XeTai
+
         System.out.println("Thêm xe tải:");
         themPhuongTien();
     }
 
     public void themXeMay() {
-        // Gọi phương thức themPhuongTien() và xử lý riêng cho XeMay
+
         System.out.println("Thêm xe máy:");
         themPhuongTien();
     }
 
     public void themOto() {
-        // Gọi phương thức themPhuongTien() và xử lý riêng cho Ôtô
+
         System.out.println("Thêm ôtô:");
         themPhuongTien();
     }
 
     public void hienThiXeTai() {
-        hienThiPhuongTien(); // Hiển thị thông tin cho XeTai
+        hienThiPhuongTien();
     }
 
     public void hienThiOto() {
-        hienThiPhuongTien(); // Hiển thị thông tin cho Ôtô
+        hienThiPhuongTien();
     }
 
     public void hienThiXeMay() {
-        hienThiPhuongTien(); // Hiển thị thông tin cho XeMay
+        hienThiPhuongTien();
     }
 }
