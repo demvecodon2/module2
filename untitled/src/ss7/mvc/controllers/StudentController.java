@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class StudentController {
     private static IStudentService iStudentService = new StudentService();
     private static Scanner scanner = new Scanner(System.in);
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static void displayStudent() {
         int choice;
@@ -65,7 +65,8 @@ public class StudentController {
     }
 
     public static void addStudent() {
-
+        System.out.println("Nhập id học sinh");
+        int id = parseInt();
         System.out.println("Nhập tên học sinh:");
         String name = scanner.nextLine();
         LocalDate dateOfBirth = promptForDate("Nhập ngày tháng năm sinh học viên (định dạng: yyyy-MM-dd):");
@@ -75,12 +76,8 @@ public class StudentController {
         String phoneNumber = scanner.nextLine();
         System.out.println("Nhập lớp của học viên:");
         String className = scanner.nextLine();
-
-        int id = iStudentService.getNextId();
-
-        Student student = new Student(name, dateOfBirth, email, phoneNumber, className);
+        Student student = new Student(id,name, dateOfBirth, email, phoneNumber, className);
         iStudentService.add(student);
-
         System.out.println("Thêm học viên thành công với ID: " + id);
     }
 

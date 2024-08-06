@@ -1,13 +1,9 @@
 package ss7.mvc.sevirce.teach_sevirce.teacher_service;
 
-import ss7.mvc.model.Student;
 import ss7.mvc.model.Teacher;
 import ss7.mvc.repository.teacher_repo.ITeacherRepository;
-import ss7.mvc.repository.teacher_repo.TeacherRepository;
 
 
-import ss7.mvc.model.Teacher;
-import ss7.mvc.repository.teacher_repo.ITeacherRepository;
 import ss7.mvc.util.ReadAndWrite;
 
 import java.time.LocalDate;
@@ -51,7 +47,7 @@ public class TeacherService implements ITeacherService {
         for (Teacher t : teachers) {
             stringList.add(t.toCsvString());
         }
-        ReadAndWrite.writeFileCSVToListString(TEACHER_FILE, stringList);
+        ReadAndWrite.writeFileCSVToListString(TEACHER_FILE, stringList, true);
     }
 
     @Override
@@ -72,7 +68,7 @@ public class TeacherService implements ITeacherService {
         for (Teacher t : teachers) {
             stringList.add(t.toCsvString());
         }
-        ReadAndWrite.writeFileCSVToListString(TEACHER_FILE, stringList);
+        ReadAndWrite.writeFileCSVToListString(TEACHER_FILE, stringList, true);
     }
 
     @Override
@@ -83,7 +79,7 @@ public class TeacherService implements ITeacherService {
         for (Teacher t : teachers) {
             stringList.add(t.toCsvString());
         }
-        ReadAndWrite.writeFileCSVToListString(TEACHER_FILE, stringList);
+        ReadAndWrite.writeFileCSVToListString(TEACHER_FILE, stringList, true);
     }
 
     @Override

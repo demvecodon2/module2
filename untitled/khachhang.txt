@@ -1,0 +1,1 @@
+KhachHang{maKhachHang='KHNN-00001', tenKhachHang='HOANG NGOC HIEU', diaChi='12', soDienThoai='12'}

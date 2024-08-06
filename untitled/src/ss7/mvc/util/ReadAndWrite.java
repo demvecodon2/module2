@@ -34,7 +34,7 @@ public class ReadAndWrite {
         }
         return stringList;
     }
-    public static void writeFileCSVToListString(String pathFile, List<String> stringList) {
+    public static void writeFileCSVToListString(String pathFile, List<String> stringList, boolean b) {
         File file = new File(pathFile);
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;

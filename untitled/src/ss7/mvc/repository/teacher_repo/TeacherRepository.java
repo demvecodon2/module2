@@ -1,8 +1,7 @@
 package ss7.mvc.repository.teacher_repo;
-
+import ss7.mvc.model.Student;
 import ss7.mvc.model.Teacher;
 import ss7.mvc.util.ReadAndWrite;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,43 +14,28 @@ public class TeacherRepository implements ITeacherRepository {
     public List<Teacher> findAll() {
         List<String> stringList = ReadAndWrite.readFileCSVToListString(CSV_FILE_TEACHER);
         List<Teacher> teacherList = new ArrayList<>();
-        for (String string : stringList) {
-            String[] stringArray = string.split(",");
-            if (stringArray.length == 6) {
-                try {
-                    int id = Integer.parseInt(stringArray[0]);
-                    LocalDate localDate = LocalDate.parse(stringArray[2]);
-                    Teacher teacher = new Teacher(id, stringArray[1], localDate, stringArray[3], stringArray[4], stringArray[5]);
-                    teacherList.add(teacher);
+       if (stringList != null) {
+           for (String string : stringList) {
+               String[] array = string.split(",");
+               Student student = new Student(Integer.parseInt(array[0]),array[1],LocalDate.parse(array[2]),array[3],array[4],array[5] );
+               stringList.add(student.toString());
+           }
+       }
+       return teacherList;
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-        }
-
-        return teacherList;
     }
-
     @Override
     public void add(Teacher teacher) {
         List<String> stringList = new ArrayList<>();
         stringList.add(teacher.toCsvString());
-        ReadAndWrite.writeFileCSVToListString(CSV_FILE_TEACHER, stringList);
-
-
+        ReadAndWrite.writeFileCSVToListString(CSV_FILE_TEACHER, stringList, true);
     }
-
     @Override
     public boolean exists(int id) {
        List<Teacher> teacherList = findAll();
 
                return teacherList.stream().anyMatch(teacher -> teacher.getId() == id);
            }
-
-
     @Override
     public void update(int id, Teacher updatedTeacher) {
         List<String> stringList = new ArrayList<>();
@@ -66,8 +50,6 @@ public class TeacherRepository implements ITeacherRepository {
         }
         stringList.add(updatedTeacher.toCsvString());
 
-
-
     }
     @Override
     public void delete(int id) {
@@ -81,12 +63,11 @@ public class TeacherRepository implements ITeacherRepository {
         for (Teacher teacher : teacherList) {
             stringList.add(teacher.toCsvString());
         }
-        ReadAndWrite.writeFileCSVToListString(CSV_FILE_TEACHER, stringList);
+        ReadAndWrite.writeFileCSVToListString(CSV_FILE_TEACHER, stringList, true);
     }
     @Override
     public Teacher findById(int id) {
         List<Teacher> teacherList = findAll();
-
         return teacherList.stream().filter(teacher -> teacher.getId() == id).findFirst().orElse(null);
 
     }

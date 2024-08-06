@@ -13,7 +13,7 @@ public class CodegymManagement {
         try {
             int choice;
             do {
-                displayMenu();
+                    displayMenu();
                 choice = getIntInput();
 
                 switch (choice) {

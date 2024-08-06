@@ -1,6 +1,7 @@
 package ss7.mvc.controllers;
 
 import ss7.mvc.model.Teacher;
+import ss7.mvc.mommo.RegexHandler;
 import ss7.mvc.repository.teacher_repo.TeacherRepository;
 import ss7.mvc.sevirce.teach_sevirce.teacher_service.ITeacherService;
 import ss7.mvc.sevirce.teach_sevirce.teacher_service.TeacherService;
@@ -69,21 +70,21 @@ public class TeacherController {
     private static void addTeacher() {
         try {
             System.out.println("Nhập ID:");
-            int id = Integer.parseInt(scanner.nextLine());
+            int id = RegexHandler.checkId();
             if (teacherService.exists(id)) {
                 System.out.println("ID đã tồn tại.");
                 return;
             }
             System.out.println("Nhập tên giảng viên:");
-            String name = scanner.nextLine();
+            String name = RegexHandler.checkName();
             System.out.println("Nhập ngày tháng năm sinh của giảng viên (yyyy-MM-dd):");
-            LocalDate dateOfBirth = LocalDate.parse(scanner.nextLine());
+            LocalDate dateOfBirth = LocalDate.parse(RegexHandler.checkDateOfBirth());
             System.out.println("Nhập Email giảng viên:");
-            String email = scanner.nextLine();
+            String email = RegexHandler.checkEmail();
             System.out.println("Nhập số điện thoại của giảng viên:");
-            String phoneNumber = scanner.nextLine();
+            String phoneNumber = RegexHandler.checkPhone();
             System.out.println("Nhập lớp dạy:");
-            String className = scanner.nextLine();
+            String className = RegexHandler.checkClassName();
             Teacher teacher = new Teacher(id, name, dateOfBirth, email, phoneNumber, className);
             teacherService.add(teacher);
             System.out.println("Đã thêm giảng viên.");
@@ -97,22 +98,21 @@ public class TeacherController {
     private static void editTeacher() {
         try {
             System.out.println("Nhập ID giảng viên cần chỉnh sửa:");
-            int id = Integer.parseInt(scanner.nextLine());
+            int id = RegexHandler.checkId();
             if (!teacherService.exists(id)) {
                 System.out.println("ID không tồn tại.");
                 return;
             }
-
             System.out.println("Nhập tên giảng viên mới:");
-            String name = scanner.nextLine();
+            String name = RegexHandler.checkName();
             System.out.println("Nhập ngày tháng năm sinh mới của giảng viên (yyyy-MM-dd):");
-            LocalDate dateOfBirth = LocalDate.parse(scanner.nextLine());
+            LocalDate dateOfBirth = LocalDate.parse(RegexHandler.checkDateOfBirth());
             System.out.println("Nhập Email mới của giảng viên:");
-            String email = scanner.nextLine();
+            String email = RegexHandler.checkEmail();
             System.out.println("Nhập số điện thoại mới của giảng viên:");
-            String phoneNumber = scanner.nextLine();
+            String phoneNumber = RegexHandler.checkPhone();
             System.out.println("Nhập lớp dạy mới:");
-            String className = scanner.nextLine();
+            String className = RegexHandler.checkClassName();
 
             Teacher teacher = new Teacher(id, name, dateOfBirth, email, phoneNumber, className);
             teacherService.edit(teacher);
@@ -127,7 +127,7 @@ public class TeacherController {
     private static void deleteTeacher() {
         try {
             System.out.println("Nhập ID giảng viên cần xóa:");
-            int id = Integer.parseInt(scanner.nextLine());
+            int id = RegexHandler.checkId();
             if (!teacherService.exists(id)) {
                 System.out.println("ID không tồn tại.");
                 return;

@@ -54,7 +54,7 @@ public class PhuongTienControllers {
         String chuSoHuu = scanner.nextLine();
 
         switch (choice) {
-            case 1: // Xe tải
+            case 1:
                 System.out.println("Nhập tải trọng:");
                 double taiTrong = Double.parseDouble(scanner.nextLine());
                 XeTai xeTai = new XeTai(bienKiemSoat, hangSanXuat, LocalDate.of(namSanXuat, 1, 1), chuSoHuu, taiTrong);

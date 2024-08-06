@@ -11,8 +11,7 @@ public class Student {
     private String phoneNumber;
     private String className;
 
-    // Constructor
-    public Student(String name, LocalDate dateOfBirth, String email, String phoneNumber, String className) {
+    public Student(int id,String name, LocalDate dateOfBirth, String email, String phoneNumber, String className) {
         this.id = id;
         this.name = name;
         this.dateOfBirth = dateOfBirth;
@@ -21,7 +20,6 @@ public class Student {
         this.className = className;
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -82,7 +80,6 @@ public class Student {
                 '}';
     }
 
-    // Converts Student object to a CSV-compatible row format
     public String toCSVRow() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return id + "," +

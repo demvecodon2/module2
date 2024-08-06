@@ -4,45 +4,36 @@ import ss7.mvc.model.Student;
 import ss7.mvc.util.ReadAndWrite;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentService implements IStudentService {
-    private static final String STUDENT_FILE_NAME = "";
+    private static final String STUDENT_FILE_NAME = "src/ss7/mvc/data/studen.csv";
 
     @Override
     public List<Student> findAll() {
-        List<String> stringList = ReadAndWrite.readFileCSVToListString(STUDENT_FILE_NAME);
-        List<Student> studentList = new ArrayList<>();
-        for (String s : stringList) {
-            String[] array = s.split(",");
+       List<String> student= ReadAndWrite.readFileCSVToListString(STUDENT_FILE_NAME);
+       List<Student> students= new ArrayList<>();
+       if (student!=null) {
+           for (String s : student) {
+               String[] arr = s.split(",");
+               Student student1= new Student(Integer.parseInt(arr[0]),arr[1],LocalDate.parse(arr[2]),arr[3],arr[4],arr[5] );
+               students.add(student1);
 
-            if (array.length == 6) {
-                try {
-                    int id = Integer.parseInt(array[0]);
-                    String name = array[1];
-                    LocalDate dateOfBirth = LocalDate.parse(array[2]);
-                    String email = array[3];
-                    String phoneNumber = array[4];
-                    String className = array[5];
-                    Student student = new Student(name, dateOfBirth, email, phoneNumber, className);
-                    studentList.add(student);
-                } catch (NumberFormatException | DateTimeParseException e) {
-                    System.out.println("Lỗi khi phân tích dữ liệu: " + e.getMessage());
-                }
-            } else {
-                System.out.println("Dòng dữ liệu không hợp lệ: " + s);
-            }
-        }
-        return studentList;
+
+           }
+       }return students;
     }
-
     @Override
     public void add(Student student) {
-        List<Student> students = findAll();
-        students.add(student);
-        saveAll(students);
+      List<Student>studentList= findAll();
+      studentList.add(student);
+      List<String> stringList= new ArrayList<>();
+      for (Student s : studentList) {
+          stringList.add(s.getName());
+      }
+      ReadAndWrite.writeFileCSVToListString(STUDENT_FILE_NAME, stringList, true);
+
     }
 
     @Override
@@ -62,13 +53,13 @@ public class StudentService implements IStudentService {
     @Override
     public boolean delete(int id) {
         List<Student> students = findAll();
-        boolean removed = students.removeIf(student -> student.getId() == id);
-        if (removed) {
-            saveAll(students);
-        } else {
-            System.out.println("Học viên với ID " + id + " không tồn tại.");
+        students.removeIf(student -> student.getId() == id);
+        List<String> studentList = new ArrayList<>();
+        for (Student student : students) {
+            studentList.add(student.toCSVRow());
         }
-        return removed;
+        ReadAndWrite.writeFileCSVToListString(STUDENT_FILE_NAME, studentList, true);
+        return false;
     }
 
     @Override
@@ -94,6 +85,6 @@ public class StudentService implements IStudentService {
         for (Student student : students) {
             stringList.add(student.toCsvString());
         }
-        ReadAndWrite.writeFileCSVToListString(STUDENT_FILE_NAME + "_" + getNextId(), stringList);
+        ReadAndWrite.writeFileCSVToListString(STUDENT_FILE_NAME + "_" + getNextId(), stringList, true);
     }
 }
