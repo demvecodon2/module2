@@ -3,13 +3,12 @@ package case_study_module2.momo;
 import java.util.Scanner;
 
 public class RegexHandler {
-    // Regex patterns
-    private static final String REGEX_ID = "^ID-[0-9]{4}$"; // Example: ID-1234
-    private static final String REGEX_NAME = "^[a-zA-Z ]{4,30}$"; // 4 to 30 alphabetic characters and spaces
-    private static final String REGEX_GIA = "^[0-9]+$"; // One or more digits
-    private static final String REGEX_LOAI = "^HL-[0-9]{2}$"; // Example: HL-12
-    private static final String REGEX_SOLUONG = "^[0-9]+$"; // One or more digits
-    private static final String REGEX_DIACHI = "^[A-Za-z0-9, ]{10,50}$"; // 10 to 50 characters (letters, digits, commas, spaces)
+    private static final String REGEX_ID = "^ID-[0-9]{4}$";
+    private static final String REGEX_NAME = "^[a-zA-Z ]{4,30}$";
+    private static final String REGEX_GIA = "^[0-9]+$";
+    private static final String REGEX_LOAI = "^HL-[0-9]{2}$";
+    private static final String REGEX_SOLUONG = "^[0-9]+$";
+    private static final String REGEX_DIACHI = "^[A-Za-z0-9, ]{5,50}$";
 
     private static final Scanner scanner = new Scanner(System.in);
 

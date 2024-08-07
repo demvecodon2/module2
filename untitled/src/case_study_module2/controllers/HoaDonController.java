@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class HoaDonController {
-    private static final String HOA_DON_FILE="src/case_study_module2/data/HoaDon.csv";
     private static final IHoaDonRepo hoaDonRepo= new HoaDonRepoImpl();
     private static final Scanner scanner = new Scanner(System.in);
     private static String maHoaDon;
@@ -107,7 +106,7 @@ public class HoaDonController {
            hoaDonRepo.add(hoaDon1);
            System.out.println(" ĐÃ SỬA THÀNH CÔNG ");
        }else {
-           System.out.println("Không tim thấy sản phẩm có mã "+maHoaDon);
+           System.out.println("Không tim thấy sản phẩm có mã "+ maHoaDon);
        }
 
 

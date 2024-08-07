@@ -39,13 +39,11 @@ public class HoaDonController {
             System.out.println("Định dạng ngày tháng không hợp lệ. Vui lòng sử dụng định dạng yyyy-MM-dd.");
             return;
         }
-
         System.out.println("Nhập số lượng (số KW tiêu thụ):");
         int soLuong = scanner.nextInt();
-
         System.out.println("Nhập đơn giá:");
         int donGia = scanner.nextInt();
-        scanner.nextLine(); // Clear buffer
+        scanner.nextLine();
 
         HoaDon hoaDon;
         System.out.println("Chọn loại khách hàng:");
@@ -63,7 +61,6 @@ public class HoaDonController {
         addHoaDonToFile(hoaDon);
         System.out.println("Hóa đơn đã được thêm vào thành công.");
     }
-
     public void chinhSuaHoaDon(String maHoaDon) throws IOException {
         File inputFile = new File(HOADON_FILE);
         File tempFile = new File("src/hoa_don_tien_dien/data/HoaDon_temp.csv");
@@ -116,7 +113,6 @@ public class HoaDonController {
             System.out.println("Không thể đổi tên file tạm thời.");
         }
     }
-
     public void hienThiChiTietHoaDon(String maHoaDon) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(HOADON_FILE))) {
             String line;

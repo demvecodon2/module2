@@ -3,8 +3,6 @@
     import case_study_module2.model.NguoiTieuDung;
     import case_study_module2.repository.nguoi_mua.INguoiMuaRepo;
     import case_study_module2.repository.nguoi_mua.NguoiMuaRepoImpl;
-
-    import java.io.IOException;
     import java.util.List;
     import java.util.Scanner;
 
@@ -13,7 +11,6 @@
     public class NguoiMuaController {
         private static final INguoiMuaRepo nguoiMuaRepo = new NguoiMuaRepoImpl();
         private static final Scanner scanner = new Scanner(System.in);
-        private static final String NGUOI_MUA_FILE= "src/case_study_module2/data/NguoiMua.csv";
         public static void displayNguoiTieuDung() {
             int choice;
             do {
@@ -57,7 +54,6 @@
             System.out.println("Thông tin người tiêu dùng đã được lưu.");
         }
 
-        // Method to display consumer information
         private static void hienThiNguoiTieuDung() {
             List<NguoiTieuDung> danhSachNguoiTieuDung = nguoiMuaRepo.findAll();
             if (danhSachNguoiTieuDung.isEmpty()) {

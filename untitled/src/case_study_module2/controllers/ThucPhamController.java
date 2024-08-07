@@ -8,12 +8,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ThucPhamController {
-    private ISanPhamRepo sanPhamRepo;
-    private Scanner scanner;
+    private final ISanPhamRepo sanPhamRepo;
 
     public ThucPhamController(ISanPhamRepo sanPhamRepo) {
         this.sanPhamRepo = sanPhamRepo;
-        this.scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
     }
 
     public void hienThiSanPham() {
@@ -30,7 +29,7 @@ public class ThucPhamController {
 
     public void themMoiThucPham() {
         System.out.println("NHẬP MÃ SẢN PHẨM");
-        String ma = RegexHandler.kiemTraId();
+        int ma = Integer.parseInt(RegexHandler.kiemTraId());
         System.out.print("Nhập tên: ");
         String ten = RegexHandler.kiemTraName();
         System.out.print("Nhập giá: ");
@@ -41,10 +40,7 @@ public class ThucPhamController {
         String soLuong = String.valueOf(RegexHandler.kiemTraSoluong());
         System.out.print("Nhập địa điểm hàng hóa: ");
         String diaDiem = RegexHandler.kiemTraDiachi();
-
-        int maInt = Integer.parseInt(ma);
-
-        CacLoaiThucPham thucPham = new CacLoaiThucPham(maInt, ten, gia, loai, soLuong, diaDiem);
+        CacLoaiThucPham thucPham = new CacLoaiThucPham(ma, ten, gia, loai, soLuong, diaDiem);
         sanPhamRepo.themSanPham(thucPham);
         System.out.println("Đã thêm mới sản phẩm thành công.");
     }
@@ -52,12 +48,10 @@ public class ThucPhamController {
     public void chinhSuaSanPham() {
         System.out.print("Nhập mã sản phẩm cần chỉnh sửa: ");
         int ma = Integer.parseInt(RegexHandler.kiemTraId());
-
         CacLoaiThucPham thucPham = sanPhamRepo.findMa(ma);
         if (thucPham != null) {
             System.out.println("Thông tin sản phẩm cần chỉnh sửa:");
             System.out.println(thucPham);
-
             System.out.print("Nhập tên mới: ");
             String tenMoi = RegexHandler.kiemTraName();
             System.out.print("Nhập giá mới: ");

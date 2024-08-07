@@ -148,7 +148,6 @@ public class KhachHangController {
                 }
             }
         }
-
         if (danhSachKhachHang.isEmpty()) {
             System.out.println("Không có khách hàng nào được tìm thấy với tên: " + tenKhachHangCanTim);
         } else {

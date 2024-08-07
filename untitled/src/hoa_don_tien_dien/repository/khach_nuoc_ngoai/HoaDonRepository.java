@@ -16,7 +16,6 @@ public class HoaDonRepository {
             bw.newLine();
         }
     }
-
     public List<HoaDon> getAllHoaDon() throws IOException {
         List<HoaDon> hoaDonList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(HOADON_FILE))) {
@@ -25,11 +24,10 @@ public class HoaDonRepository {
                 String[] parts = line.split(",");
                 String maHoaDon = parts[0];
                 String maKhachHang = parts[1];
-                // Assuming parts[2] is the date in string format yyyy-MM-dd
                 String ngayRaHoaDonStr = parts[2];
                 LocalDate ngayRaHoaDon = LocalDate.parse(ngayRaHoaDonStr);
                 int soLuong = Integer.parseInt(parts[3]);
-                double donGia = Double.parseDouble(parts[4]); // Assuming this is the price per unit consumed
+                double donGia = Double.parseDouble(parts[4]);
                 HoaDon hoaDon = new HoaDon(maHoaDon, maKhachHang, ngayRaHoaDon, (double) soLuong, (int) donGia);
                 hoaDonList.add(hoaDon);
             }
@@ -37,5 +35,4 @@ public class HoaDonRepository {
         return hoaDonList;
     }
 
-    // Add other methods as needed (update, delete, search, etc.)
 }
